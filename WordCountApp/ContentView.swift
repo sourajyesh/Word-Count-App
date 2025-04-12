@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  WordCountApp
+//  WordCount
 //
 //  Created by Sourajyesh on 21/10/24.
 //
@@ -8,17 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var paragraph = ""
+    @State private var wordCount = 0
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            TextEditor(text: $paragraph)
+                .border(Color.blue, width: 2)
+                .padding()
+            
+            Text("Word Count: \(wordCount)")
+                .font(.title)
+                .onChange(of: paragraph, perform: { value in
+                    wordCount = countWords(in: paragraph)
+                })
+
+            
+            .padding()
         }
-        .padding()
+
+    }
+
+    func countWords(in text: String) -> Int {
+        let words = text.split { !$0.isLetter }
+        return words.count
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
+
